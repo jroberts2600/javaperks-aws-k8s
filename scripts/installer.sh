@@ -99,6 +99,7 @@ export TABLE_CART="${TABLE_CART}"
 export TABLE_ORDER="${TABLE_ORDER}"
 export LDAP_ADMIN_PASS="${LDAP_ADMIN_PASS}"
 export LDAP_ADMIN_USER="cn=admin,dc=javaperks,dc=local"
+export ZONE_ID="${ZONE_ID}"
 export CLIENT_IP=`curl -s http://169.254.169.254/latest/meta-data/local-ipv4`
 export PUBLIC_IP=`curl -s http://169.254.169.254/latest/meta-data/public-ipv4`
 export AWS_HOSTNAME=`curl -s http://169.254.169.254/latest/meta-data/local-hostname`
@@ -122,7 +123,7 @@ echo "Preparation complete."
 # 
 cd /root/javaperks-aws-k8s/
 
-# Configures Kubernetes
+# Configure Kubernetes
 
 . /root/javaperks-aws-k8s/scripts/01_install_k8s.sh
 
@@ -131,24 +132,34 @@ cd /root/javaperks-aws-k8s/
 export KUBEJOIN="$(cat /root/kubeadm-join.txt | sed -e ':a;N;$!ba;s/ \\\n    / /g')"
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
-# Configures the Consul server
+# Configure the Consul server
 
 . /root/javaperks-aws-k8s/scripts/02_install_consul.sh
 
-# Configures the Consul server
+# Install the Vault server
 
 . /root/javaperks-aws-k8s/scripts/03_install_vault.sh
 
+# Install and configure Ambassador
+
+/root/javaperks-aws-k8s/scripts/04_install_ambassador.sh
+
 # Initial data load
 
-. /root/javaperks-aws-k8s/scripts/04_prepopulate_data.sh
+/root/javaperks-aws-k8s/scripts/05_prepopulate_data.sh
 
 # Launch JavaPerks
 
-. /root/javaperks-aws-k8s/scripts/05_launch_javaperks.sh
+/root/javaperks-aws-k8s/scripts/06_launch_javaperks.sh
 
 # Final data load
 
-. /root/javaperks-aws-k8s/scripts/06_postpopulate_data.sh
+/root/javaperks-aws-k8s/scripts/07_postpopulate_data.sh
+
+# Create DNS records
+
+/root/javaperks-aws-k8s/scripts/08_dns_records.sh
 
 echo "All Done!!!"
+
+#

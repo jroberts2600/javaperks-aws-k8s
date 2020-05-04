@@ -7,10 +7,17 @@ sudo bash -c "cat >/root/helm-consul-values.yaml" <<EOT
 # helm-consul-values.yaml
 global:
   datacenter: $AWS_REGION
+  acls:
+    bootstrapToken:
+      secretName: env-secret-values
+      secretKey: consul-token
 
 server:
   replicas: 3
   bootstrapExpect: 3
+  enterpriseLicense:
+    secretName: env-secret-values
+    secretKey: consul-license
   disruptionBudget:
     enabled: true
     maxUnavailable: 0
@@ -31,10 +38,10 @@ connectInject:
   centralConfig:
     enabled: true
     defaultProtocol: 'http'
-    proxyDefaults: |
-      {
-        "envoy_dogstatsd_url": "udp://127.0.0.1:9125"
-      }
+  #   proxyDefaults: |
+  #     {
+  #       "envoy_dogstatsd_url": "udp://127.0.0.1:9125"
+  #     }
 EOT
 
 helm install -f helm-consul-values.yaml hc-consul ./consul-helm
