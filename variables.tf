@@ -8,6 +8,11 @@ variable "aws_secret_key" {
     description = "AWS Secret Key"
 }
 
+variable "aws_session_token" {
+    type = string
+    description = "AWS Session Token"
+}
+
 variable "aws_region" {
     type = string
     description = "AWS Region"
@@ -64,11 +69,6 @@ variable "consul_license_key" {
     description = "License key for Consul Enterprise"
 }
 
-variable "consul_token" {
-    type = string
-    description = "ACL token for creating policies in Consul"
-}
-
 variable "vault_license_key" {
     type = string
     description = "License key for Vault Enterprise"
@@ -113,4 +113,16 @@ variable "zoneid" {
     type = string
     description = "Zone ID for Route 53"
     default = ""
+}
+
+variable "consul_helm" {
+    type = string
+    description = "Helm chart to use to install Consul"
+    default = "consul"
+}
+
+variable "vault_helm" {
+    type = string
+    description = "Helm chart to use to install Vault"
+    default = "vault"
 }

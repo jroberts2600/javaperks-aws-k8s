@@ -18,7 +18,6 @@ resource "aws_instance" "jp-k8s-master" {
         S3_BUCKET = aws_s3_bucket.staticimg.id
         VAULT_LICENSE = var.vault_license_key
         CONSUL_LICENSE = var.consul_license_key
-        CONSUL_TOKEN = var.consul_token
         TABLE_PRODUCT = aws_dynamodb_table.product-data-table.id
         TABLE_CART = aws_dynamodb_table.customer-cart.id
         TABLE_ORDER = aws_dynamodb_table.customer-order-table.id
@@ -26,6 +25,8 @@ resource "aws_instance" "jp-k8s-master" {
         LDAP_ADMIN_PASS = var.ldap_pass
         VAULT_DL_URL = var.vault_dl_url
         ZONE_ID = var.zoneid
+        CONSUL_HELM = var.consul_helm
+        VAULT_HELM = var.vault_helm
     })
 
     tags = {
