@@ -125,6 +125,11 @@ export KUBECONFIG=/etc/kubernetes/admin.conf
 echo "export KUBECONFIG=/etc/kubernetes/admin.conf" >> /root/.profile
 alias k=kubectl
 echo "alias k=kubectl" >> /root/.profile
+sudo bash -c "cat >>/root/.profile" <<EOT
+krun() {
+        kubectl exec -it $1 -- /bin/bash
+}
+EOT
 
 # add in CNI, storage class, and controller
 mkdir -p /etc/cni/net.d
@@ -252,6 +257,7 @@ kubectl create configmap env-values \
 kubectl create secret generic env-secret-values \
     --from-literal=mysql-pass="${MYSQL_PASS}" \
     --from-literal=aws-secret-key="${AWS_SECRET_KEY}" \
+    --from-literal=aws-session-token="${AWS_SESSION_TOKEN}" \
     --from-literal=aws-kms-key-id="${AWS_KMS_KEY_ID}" \
     --from-literal=vault-license="${VAULT_LICENSE}" \
     --from-literal=consul-license="${CONSUL_LICENSE}" \

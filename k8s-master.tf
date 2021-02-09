@@ -13,6 +13,7 @@ resource "aws_instance" "jp-k8s-master" {
         MYSQL_DB = var.mysql_database
         AWS_ACCESS_KEY = var.aws_access_key
         AWS_SECRET_KEY = var.aws_secret_key
+        AWS_SESSION_TOKEN = var.aws_session_token
         AWS_KMS_KEY_ID = var.aws_kms_key_id
         REGION = var.aws_region
         S3_BUCKET = aws_s3_bucket.staticimg.id
@@ -31,9 +32,11 @@ resource "aws_instance" "jp-k8s-master" {
 
     tags = {
         Name = "jp-k8s-server-${var.unit_prefix}"
-        # TTL = "-1"
-        owner = var.owner_email
         "kubernetes.io/cluster/javaperks" = "owned"
+        Owner = var.owner
+        Region = var.hc_region
+        Purpose = var.purpose
+        TTL = var.ttl
     }
 }
 
@@ -43,6 +46,10 @@ resource "aws_security_group" "jp-k8s-master-sg" {
     vpc_id = aws_vpc.primary-vpc.id
     tags = {
         "kubernetes.io/cluster/javaperks" = "owned"
+        Owner = var.owner
+        Region = var.hc_region
+        Purpose = var.purpose
+        TTL = var.ttl
     }
 
     ingress {
